@@ -92,3 +92,15 @@ bash_enhancements_kubectl() {
 if command -v kubectl &>/dev/null; then
     bash_enhancements_kubectl
 fi
+
+# A function to update this script from github
+bash_enhancements_update() {
+    # If the existing file is a symlink, don't update and warn the user
+    if [[ -L "$HOME/.bash-enhancements.sh" ]]; then
+        echo "Warning: The existing bash enhancements script is a symlink and will not be updated."
+        return 1
+    fi
+
+    curl -fsSL https://raw.githubusercontent.com/smxlong/dump/main/bash/bash-enhancements.sh -o "$HOME/.bash-enhancements.sh"
+    echo "Bash enhancements script updated. This won't take effect until you source it again or restart your terminal."
+}
