@@ -101,6 +101,6 @@ bash_enhancements_update() {
         return 1
     fi
 
-    curl -fsSL https://raw.githubusercontent.com/smxlong/dump/main/bash/bash-enhancements.sh -o "$HOME/.bash-enhancements.sh"
+    curl -fsSL https://raw.githubusercontent.com/smxlong/dump/refs/heads/main/bash/bash-enhancements.sh -o "$HOME/.bash-enhancements.sh"
     echo "Bash enhancements script updated. This won't take effect until you source it again or restart your terminal."
 }

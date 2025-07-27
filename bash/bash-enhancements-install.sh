@@ -5,7 +5,7 @@ set -euo pipefail
 # This script installs the bash-enhancements.sh script, and optionally configures
 # it to be updated periodically.
 
-SCRIPT_URL="https://raw.githubusercontent.com/smxlong/dump/main/bash/bash-enhancements.sh"
+SCRIPT_URL="https://raw.githubusercontent.com/smxlong/dump/refs/heads/main/bash/bash-enhancements.sh"
 INSTALL_PATH="$HOME/.bash-enhancements.sh"
 BASHRC_PATH="$HOME/.bashrc"
 
