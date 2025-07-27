@@ -34,28 +34,28 @@ fi
 # Create a good prompt.
 
 # Prompt component functions
-prompt_status_emoji() {
+bash_enhancements_prompt_status_emoji() {
     local last_exit=$?
     if [[ $BASH_ENHANCEMENTS_COLOR -eq 1 ]]; then
-        if [[ $last_exit -eq 0 ]]; then echo "😎"; else echo "😞"; fi
+        if [[ $last_exit -eq 0 ]]; then echo "🙂"; else echo "😞"; fi
     else
         if [[ $last_exit -eq 0 ]]; then echo ":)"; else echo ":("; fi
     fi
 }
 
-prompt_chroot_and_user() {
+bash_enhancements_prompt_chroot_and_user() {
     if [[ $BASH_ENHANCEMENTS_COLOR -eq 1 ]]; then
-        echo '${debian_chroot:+($debian_chroot)}\[\033[01;32m\]$(prompt_status_emoji)\n==== \u@\h\[\033[00m\]'
+        echo '${debian_chroot:+($debian_chroot)}\[\033[01;32m\]$(bash_enhancements_prompt_status_emoji) \u@\h\[\033[00m\]'
     else
-        echo '${debian_chroot:+($debian_chroot)}$(prompt_status_emoji)\n==== \u@\h'
+        echo '${debian_chroot:+($debian_chroot)}$(bash_enhancements_prompt_status_emoji) \u@\h'
     fi
 }
 
-prompt_git_info() {
+bash_enhancements_prompt_git_info() {
     echo '$(__git_ps1 "%s")'
 }
 
-prompt_working_directory() {
+bash_enhancements_prompt_working_directory() {
     if [[ $BASH_ENHANCEMENTS_COLOR -eq 1 ]]; then
         echo '\[\033[01;34m\]\w\[\033[00m\] \$ '
     else
@@ -63,5 +63,32 @@ prompt_working_directory() {
     fi
 }
 
+bash_enhancements_prompt_kubecontext_namespace() {
+    if command -v kubectl &>/dev/null; then
+        local context
+        context=$(kubectl config current-context 2>/dev/null || echo "unknown")
+        local namespace
+        namespace=$(kubectl config view --minify -o jsonpath='{.contexts[0].context.namespace}' 2>/dev/null || echo "default")
+        if [[ $BASH_ENHANCEMENTS_COLOR -eq 1 ]]; then
+            echo "\[\033[01;36m\]$context:\[\033[01;33m\]$namespace\[\033[00m\] "
+        else
+            echo "$context:$namespace "
+        fi
+    else
+        echo ""
+    fi
+}
+
 # Assemble the full prompt
-PS1="$(prompt_chroot_and_user)\n$(prompt_git_info)\n$(prompt_working_directory)"
+PS1="$(bash_enhancements_prompt_chroot_and_user)\n$(bash_enhancements_prompt_git_info)\n$(bash_enhancements_prompt_kubecontext_namespace)\n$(bash_enhancements_prompt_working_directory)"
+
+# Kubectl command line enhancements
+bash_enhancements_kubectl() {
+    source <(kubectl completion bash)
+    alias k=kubectl
+    complete -F __start_kubectl k
+}
+
+if command -v kubectl &>/dev/null; then
+    bash_enhancements_kubectl
+fi
